@@ -4,28 +4,29 @@ import java.util.Arrays;
 
 public class Diamond {
 
-	public String print(int n) {
-		if (n <= 0 || n % 2 == 0) {
-			return null;
+	public String print(int numberOfRows) {
+		if (numberOfRows <= 0 || numberOfRows % 2 == 0) {
+			return "";
 		}
-		StringBuilder builder = new StringBuilder(new String(make(n, n)));
-		for (int i = n - 2; i > 0; i -= 2) {
-			char[] chars = make(n, i);
-			builder.insert(0, chars);
-			builder.append(chars);
+		
+		StringBuilder builder = new StringBuilder(new String(makeRow(numberOfRows, numberOfRows)));
+		for (int numberOfStars = numberOfRows - 2; numberOfStars > 0; numberOfStars -= 2) {
+			char[] row = makeRow(numberOfRows, numberOfStars);
+			builder.insert(0, row);
+			builder.append(row);
 		}
 		return builder.toString();
 	}
 
-	private char[] make(int i, int j) {
-		int amount = ((i - j) / 2);
-		char[] chars = new char[amount + j + 1];
-		if (amount > 0) {
-			Arrays.fill(chars, 0, amount, ' ');
+	private char[] makeRow(int length, int numberOfStars) {
+		int leftPadding = ((length - numberOfStars) / 2);
+		char[] row = new char[leftPadding + numberOfStars + 1];
+		if (leftPadding > 0) {
+			Arrays.fill(row, 0, leftPadding, ' ');
 		}
-		Arrays.fill(chars, amount, amount + j, '*');
-		chars[chars.length - 1] = '\n';
-		return chars;
+		Arrays.fill(row, leftPadding, leftPadding + numberOfStars, '*');
+		row[row.length - 1] = '\n';
+		return row;
 	}
 
 }
