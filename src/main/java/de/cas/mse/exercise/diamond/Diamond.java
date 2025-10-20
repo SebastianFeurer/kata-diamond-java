@@ -4,28 +4,61 @@ import java.util.Arrays;
 
 public class Diamond {
 
-	public String print(int n) {
-		if (n <= 0 || n % 2 == 0) {
+	private static final char WHITESPACE = ' ';
+	private static final char LINEBREAK = '\n';
+	private static final char STAR = '*';
+
+	public String print(int width) {
+		if (isInvalidWidth(width)) {
 			return null;
 		}
-		StringBuilder builder = new StringBuilder(new String(make(n, n)));
-		for (int i = n - 2; i > 0; i -= 2) {
-			char[] chars = make(n, i);
-			builder.insert(0, chars);
-			builder.append(chars);
+		StringBuilder builder = generateBuilderWithMiddleRowInserted(width);
+		for (int i = width - 2; i > 0; i -= 2) {
+			char[] row = generateRow(width, i);
+			builder.insert(0, row);
+			builder.append(row);
 		}
 		return builder.toString();
 	}
 
-	private char[] make(int i, int j) {
-		int amount = ((i - j) / 2);
-		char[] chars = new char[amount + j + 1];
-		if (amount > 0) {
-			Arrays.fill(chars, 0, amount, ' ');
+	private StringBuilder generateBuilderWithMiddleRowInserted(int width) {
+		return new StringBuilder(new String(generateRow(width, width)));
+	}
+
+	private boolean isInvalidWidth(int width) {
+		return isNegativ(width) || isEven(width);
+	}
+
+	private boolean isEven(int width) {
+		return width % 2 == 0;
+	}
+
+	private boolean isNegativ(int width) {
+		return width <= 0;
+	}
+
+	private char[] generateRow(int maxRowWidth, int starCountForRow) {
+		int frontPaddingSize = ((maxRowWidth - starCountForRow) / 2);
+		char[] row = new char[frontPaddingSize + starCountForRow + 1];
+		insertFrontPadding(frontPaddingSize, row);
+		insertStars(starCountForRow, frontPaddingSize, row);
+		insertLineBreak(row);
+		return row;
+	}
+
+	private void insertLineBreak(char[] row) {
+		row[row.length - 1] = LINEBREAK;
+	}
+
+	private void insertStars(int starCountForRow, int offset, char[] row) {
+		int toIndex = offset + starCountForRow;
+		Arrays.fill(row, offset, toIndex, STAR);
+	}
+
+	private void insertFrontPadding(int whitespaceCount, char[] row) {
+		if (whitespaceCount > 0) {
+			Arrays.fill(row, 0, whitespaceCount, WHITESPACE);
 		}
-		Arrays.fill(chars, amount, amount + j, '*');
-		chars[chars.length - 1] = '\n';
-		return chars;
 	}
 
 }
